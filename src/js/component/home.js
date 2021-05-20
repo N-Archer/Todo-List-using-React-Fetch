@@ -17,10 +17,19 @@ export function Home() {
 		setToDoList(alteredList);
 	};
 
+	// const handleKeypress = e => {
+	// 	//it triggers by pressing the enter key
+	// 	if (e.keyCode === 13) {
+	// 		addToDo();
+	// 	}
+	// };
+
 	return (
 		<div className="container">
-			<div className="text-center mt-5">
-				<h1>To Do List</h1>
+			<div className="text-center mt-5 alert alert-secondary">
+				<h1>
+					My List <i class="fas fa-clipboard-list"></i>
+				</h1>
 				<div className="input-group mb-3">
 					<input
 						type="text"
@@ -35,18 +44,20 @@ export function Home() {
 							className="btn btn-outline-secondary"
 							type="button"
 							id="button-addon2"
-							onClick={() => addToDo(inputValue)}>
+							onClick={() => addToDo(inputValue)}
+							// onKeyPress={() => handleKeypress(inputValue)}
+						>
 							Add
 						</button>
 					</div>
 				</div>
 			</div>
 			<div className="row justify-content-center">
-				<ul className="col-12">
+				<ul className="col-12 ">
 					{toDoList.map((value, index) => {
 						return (
 							<React.Fragment key={index}>
-								<li className="d-flex justify-content-between">
+								<li className="d-flex justify-content-between alert alert-info">
 									{value}
 									<span>
 										<i
