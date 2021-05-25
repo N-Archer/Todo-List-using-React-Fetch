@@ -3,18 +3,59 @@ import React, { useState } from "react";
 export function Home() {
 	const [inputValue, setInputValue] = useState("");
 	const [toDoList, setToDoList] = useState([]);
+	// useEffect(() => {
+	// 	fetch("https://assets.breatheco.de/apis/fake/todos/user/sofia")
+	// 		.then(res => res.json())
+	// 		.then(response => setToDoList(response))
+	// 		.catch(error => console.error("Error:", error));
+	// }, []);
 
-	const addToDo = input => {
-		if (input) {
-			setToDoList([...toDoList, input]);
-		} else {
-			alert("Add a Task");
-		}
-	};
+	// const addToDo = input => {
+	// 	if (input) {
+	// 		setToDoList([...toDoList, input]);
+	// 	} else {
+	// 		alert("Add a Task");
+	// 	}
+	// };
 
 	const deleteToDo = indexToRemove => {
 		let alteredList = toDoList.filter((value, i) => i != indexToRemove);
 		setToDoList(alteredList);
+		fetch("https://assets.breatheco.de/apis/fake/todos/user/sofia", {
+			method: "PUT", // or 'POST'
+			body: JSON.stringify(alteredList),
+			headers: {
+				"Content-Type": "application/json"
+			}
+		})
+			.then(res => res.json())
+			.then(response => console.log("Success:", response))
+			.catch(error => console.error("Error:", error));
+	};
+
+	const addToDo = data => {
+		setToDoList(
+			toDoList.concat({
+				label: data,
+				done: false
+			})
+		);
+		setInputValue("");
+		fetch("https://assets.breatheco.de/apis/fake/todos/user/sofia", {
+			method: "PUT", // or 'POST'
+			body: JSON.stringify(
+				toDoList.concat({
+					label: data,
+					done: false
+				})
+			),
+			headers: {
+				"Content-Type": "application/json"
+			}
+		})
+			.then(res => res.json())
+			.then(response => console.log("Success:", response))
+			.catch(error => console.error("Error:", error));
 	};
 
 	// const handleKeypress = e => {
@@ -28,7 +69,7 @@ export function Home() {
 		<div className="container">
 			<div className="text-center mt-5 alert alert-secondary">
 				<h1>
-					My List <i class="fas fa-clipboard-list"></i>
+					My List <i className="fas fa-clipboard-list"></i>
 				</h1>
 				<div className="input-group mb-3">
 					<input
@@ -58,8 +99,11 @@ export function Home() {
 						return (
 							<React.Fragment key={index}>
 								<li className="d-flex justify-content-between alert alert-info">
-									{value}
+									{value.label}
 									<span>
+										<i
+											onClick={e => markDone(i)}
+											className="fas fa-check"></i>
 										<i
 											onClick={() => deleteToDo(index)}
 											className="fas fa-trash"></i>
